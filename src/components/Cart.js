@@ -1,23 +1,18 @@
-import React, { useState } from 'react';
+import React from "react";
+import { useStore } from "../utils/storeContext";
 
-const Cart = ({ products, updateStock }) => {
-  const [cartItems, setCartItems] = useState([]);
-  const [itemCount, setItemCount] = useState(0);
-
-  const addToCart = (product) => {
-    const updatedCart = [...cartItems, product];
-    setCartItems(updatedCart);
-    setItemCount(itemCount + 1);
-    updateStock(product.id, -1); // Update available stock
-  };
+const Cart = () => {
+  const { state } = useStore();
 
   return (
     <div className="cart">
       <h2>Cart</h2>
-      <p>Item Count: {itemCount}</p>
-      <ul>
-        {cartItems.map((item) => (
-          <li key={item.id}>{item.name}</li>
+      <ul className="cart-list">
+        {state.cartItems.map((item) => (
+          <li key={item.id}>
+            Name: {item.name} ---- Description: {item.description} ---- Price:{" "}
+            {item.price}
+          </li>
         ))}
       </ul>
     </div>

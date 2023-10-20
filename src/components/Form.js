@@ -1,97 +1,35 @@
-// import React from "react";
+import React from "react";
+import { useStore } from "../utils/storeContext";
 
-// const Form = () => {
-//   return (
-//     <form className="form">
-//       <div>
-//         <label htmlFor="name">Medicine Name</label>
-//         <input name="name" type="text" />
-//         <label htmlFor="description">Description</label>
-//         <input name="description" type="text" />
-//         <label htmlFor="price">Price</label>
-//         <input name="price" type="number" min={1} />
-//         <label htmlFor="qty">Available Quantity</label>
-//         <input name="qty" type="text" />
-//       </div>
-//       <button>Add Product</button>
-//     </form>
-//   );
-// };
-
-// export default Form;
-
-import React, { useState } from "react";
-
-const Form = ({ products, updateStock }) => {
-  const [selectedProductId, setSelectedProductId] = useState();
-
-  const handleProductChange = (event) => {
-    setSelectedProductId(event.target.value);
-  };
+const Form = () => {
+  const { state, dispatch } = useStore();
 
   const formHandler = (e) => {
     e.preventDefault();
-    console.log(e.target);
+    // Add the selected item to the cart
+    const selectedItem = state.availableItems.find(
+      (item) => item.name === e.target.name.value
+    );
+    if (selectedItem) {
+      dispatch({ type: "ADD_TO_CART", payload: selectedItem });
+    }
   };
 
   return (
-    <div>
-      <form onSubmit={formHandler}>
-        <label htmlFor="productSelect">Select a Product:</label>
-        <select
-          id="productSelect"
-          onChange={handleProductChange}
-          value={selectedProductId}
-        >
-          <option value="">Select a product</option>
-          {products.map((product) => (
-            <option key={product.id} value={product.id}>
-              {product.name}
+    <form className="form" onSubmit={formHandler}>
+      <div>
+        <label htmlFor="name">Medicine Name</label>
+        <select name="name">
+          <option value="">Select an item</option>
+          {state.availableItems.map((item) => (
+            <option key={item.id} value={item.name}>
+              {item.name}
             </option>
           ))}
         </select>
-        <button>Add Product</button>
-      </form>
-
-      {selectedProductId && (
-        <div>
-          <h2>Selected Product Details</h2>
-          <p>
-            Name:
-            {
-              products.find(
-                (product) => product.id === parseInt(selectedProductId)
-              ).name
-            }
-          </p>
-          <p>
-            Description:
-            {
-              products.find(
-                (product) => product.id === parseInt(selectedProductId)
-              ).description
-            }
-          </p>
-          <p>
-            Quantity:
-            {
-              products.find(
-                (product) => product.id === parseInt(selectedProductId)
-              ).quantity
-            }
-          </p>
-          <p>
-            Price:
-            {
-              products.find(
-                (product) => product.id === parseInt(selectedProductId)
-              ).price
-            }
-            Rupees
-          </p>
-        </div>
-      )}
-    </div>
+      </div>
+      <button>Add Product</button>
+    </form>
   );
 };
 

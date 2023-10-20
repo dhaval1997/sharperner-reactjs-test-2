@@ -10,15 +10,15 @@ const ModalOverlay = (props) => {
 };
 
 const Backdrop = (props) => {
-  return <div onClick={props.onClick}></div>;
+  return <div onClick={props.onClose}></div>;
 };
 
-const Modal = () => {
+const Modal = (props) => {
   const overlayroot = document.getElementById("overlay");
 
   return (
     <>
-      {createPortal(<Backdrop />, overlayroot)}
+      {createPortal(<Backdrop onClose = {props.onClose} />, overlayroot)}
       {createPortal(<ModalOverlay />, overlayroot)}
     </>
   );
